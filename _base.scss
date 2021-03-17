@@ -1,0 +1,228 @@
+$page-size: 1400px;
+$body-margin: 2em;
+$image-width: 12em;
+
+$primary: #0070d2;
+$secondary: #00d9cc;
+$red: #f7517f;
+$ascent: #c4c4c4;
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:700|Sintony:400,700");
+
+@font-face {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://fonts.googleapis.com/css2?family=Sintony&display=swap")
+    format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../default/fonts/sf-pro-text-regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text-Medium";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../default/fonts/SF-Pro-Text-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text-Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../default/fonts/SF-Pro-Text-Bold.otf") format("opentype");
+}
+
+h1 {
+  font-size: 80px;
+  font-family: "Sintony";
+}
+h2 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 58px;
+  line-height: 76px;
+}
+h3 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 44px;
+  line-height: 57px;
+}
+h4 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 34px;
+  line-height: 44px;
+}
+h5 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 35px;
+}
+h6 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+}
+small {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+}
+button {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  background: none;
+}
+button.small {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.primary {
+  padding: 15px 36px;
+  background: #0070d2;
+  border-radius: 5px;
+  margin-right: 1em;
+  color: white;
+  font-weight: normal;
+  border: none;
+}
+.secondary {
+  padding: 15px 36px;
+  border: 1px solid #0070d2;
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: #0070d2;
+}
+.smallIcon {
+  width: 24px;
+  height: 24px;
+}
+.bigIcon {
+  width: 44px;
+}
+
+body {
+  font-family: "SF Pro Text";
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+  .wtext {
+    color: white;
+  }
+  .big {
+    font-size: 20px;
+    font-family: "Sintony";
+    line-height: 30px;
+    letter-spacing: 0px;
+    color: $ascent;
+  }
+  .body2 {
+    font-family: "SF Pro Text";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  width: calc(100% - 4em);
+  overflow-x: hidden;
+  margin: 0 $body-margin;
+  padding: 0;
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
+  > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    align-items: center;
+    margin: auto;
+    max-width: $page-size;
+    margin-bottom: 5em;
+  }
+  .full {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    @media only screen and (max-width: 768px) {
+      align-items: center;
+      flex-direction: column;
+      > * {
+        max-width: none !important;
+      }
+    }
+    .one,
+    .half,
+    .triad,
+    .quarter {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 1em;
+      position: relative;
+      width: 100%;
+      border: solid 1px black;
+      margin: auto;
+      overflow: hidden;
+      align-items: flex-start;
+      > * {
+        max-width: 100%;
+      }
+      max-width: calc(#{$page-size/1} - #{$body-margin});
+    }
+    .half {
+      max-width: calc(#{$page-size/2} - #{$body-margin});
+    }
+    .triad {
+      max-width: calc(#{$page-size/3} - #{$body-margin});
+    }
+    .quarter {
+      max-width: calc(#{$page-size/4} - #{$body-margin});
+    }
+  }
+  .full.single {
+    flex-direction: column;
+  }
+  .fullWidthImage {
+    position: absolute;
+    width: 200%;
+    left: -50%;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    object-fit: fill;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -1,0 +1,514 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:700|Sintony:400,700");
+@font-face {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: 400;
+  src: url("https://fonts.googleapis.com/css2?family=Sintony&display=swap") format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../default/fonts/sf-pro-text-regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text-Medium";
+  font-style: normal;
+  font-weight: 500;
+  src: url("../default/fonts/SF-Pro-Text-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "SF Pro Text-Bold";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../default/fonts/SF-Pro-Text-Bold.otf") format("opentype");
+}
+
+h1 {
+  font-size: 80px;
+  font-family: "Sintony";
+}
+
+h2 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 58px;
+  line-height: 76px;
+}
+
+h3 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 44px;
+  line-height: 57px;
+}
+
+h4 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 34px;
+  line-height: 44px;
+}
+
+h5 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 35px;
+}
+
+h6 {
+  font-family: "Sintony";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+small {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+button {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  background: none;
+}
+
+button.small {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.primary {
+  padding: 15px 36px;
+  background: #0070d2;
+  border-radius: 5px;
+  margin-right: 1em;
+  color: white;
+  font-weight: normal;
+  border: none;
+}
+
+.secondary {
+  padding: 15px 36px;
+  border: 1px solid #0070d2;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 5px;
+  color: #0070d2;
+}
+
+.smallIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.bigIcon {
+  width: 44px;
+}
+
+body {
+  font-family: "SF Pro Text";
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+  width: calc(100% - 4em);
+  overflow-x: hidden;
+  margin: 0 2em;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body .wtext {
+  color: white;
+}
+
+body .big {
+  font-size: 20px;
+  font-family: "Sintony";
+  line-height: 30px;
+  letter-spacing: 0px;
+  color: #c4c4c4;
+}
+
+body .body2 {
+  font-family: "SF Pro Text";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+body * {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 100%;
+  position: relative;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: auto;
+  max-width: 1400px;
+  margin-bottom: 5em;
+}
+
+body .full {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  position: relative;
+}
+
+@media only screen and (max-width: 768px) {
+  body .full {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  body .full > * {
+    max-width: none !important;
+  }
+}
+
+body .full .one,
+body .full .half,
+body .full .triad,
+body .full .quarter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin: 1em;
+  position: relative;
+  width: 100%;
+  border: solid 1px black;
+  margin: auto;
+  overflow: hidden;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  max-width: calc(1400px - 2em);
+}
+
+body .full .one > *,
+body .full .half > *,
+body .full .triad > *,
+body .full .quarter > * {
+  max-width: 100%;
+}
+
+body .full .half {
+  max-width: calc(700px - 2em);
+}
+
+body .full .triad {
+  max-width: calc(466.66667px - 2em);
+}
+
+body .full .quarter {
+  max-width: calc(350px - 2em);
+}
+
+body .full.single {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+body .fullWidthImage {
+  position: absolute;
+  width: 200%;
+  left: -50%;
+  top: 0;
+  z-index: -1;
+  height: 100%;
+  -o-object-fit: fill;
+     object-fit: fill;
+}
+
+body ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bullets li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 1em;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.bullets img {
+  margin-right: 1em;
+  width: 44px;
+}
+
+.srow {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 1em 0;
+  width: 100%;
+  margin-bottom: 5em;
+}
+
+.srow > * {
+  padding-right: 2em;
+}
+
+.srow img {
+  height: 1em;
+  padding-right: 0.5em;
+}
+
+.header {
+  width: 100%;
+  padding: 1em;
+}
+
+.header div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.header ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+@media only screen and (max-width: 768px) {
+  .header ul {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .header ul > * {
+    padding: 0;
+  }
+}
+
+.header ul li {
+  margin-right: 1.5em;
+}
+
+@media only screen and (max-width: 768px) {
+  .header .mainHeader,
+  .header .subHeader {
+    display: none;
+  }
+}
+
+.hero {
+  min-height: 50vh;
+}
+
+.hero .full img {
+  max-width: 100% !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .hero .halfImage {
+    display: none !important;
+  }
+}
+
+div.halfImage {
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+}
+
+div.halfImage * {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+
+div.halfImage img {
+  max-width: 400px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  div.halfImage {
+    -webkit-box-ordinal-group: -1;
+        -ms-flex-order: -2;
+            order: -2;
+  }
+}
+
+.divFooter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  width: calc(100% - 2em);
+  margin: 1em 0;
+}
+
+.srow.tstImages img {
+  width: 5em;
+  height: auto;
+  margin-right: 2em;
+}
+
+.entImages {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 2em 0;
+}
+
+.entImages img {
+  width: 6em;
+  margin-left: -1.5em;
+}
+
+.priceCard {
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
+  text-align: center;
+  padding: 1em;
+}
+
+.priceCard ul {
+  margin-top: 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.priceCard ul li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.priceCard ul li label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.priceCard ul li i {
+  margin-right: 0.5em;
+}
+
+.banner,
+.footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+@media only screen and (max-width: 768px) {
+  .banner,
+  .footer {
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+}
+
+.banner > div,
+.footer > div {
+  margin: 1em 0;
+}
+
+@media only screen and (max-width: 768px) {
+  .footer {
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: start;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .footer div {
+    width: calc(50% - 2em);
+  }
+}
+/*# sourceMappingURL=home.css.map */

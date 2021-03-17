@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,KAAK,GAAG,GAAG,CAAC;EACV,UAAU,EAAE,UAAU;CACvB",
+    "sources": [
+        "producst.scss"
+    ],
+    "names": [],
+    "file": "producst.css"
+}
