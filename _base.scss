@@ -127,11 +127,19 @@ button.small {
   width: 44px;
 }
 
+.common {
+  min-height: 80vh;
+  margin-bottom: 0;
+}
+
 body {
+  position: relative;
+  min-height: 100vh;
   font-family: "SF Pro Text";
   font-size: 18px;
   line-height: 26px;
   letter-spacing: -0.2px;
+  padding-bottom: 1em;
   .wtext {
     color: white;
   }
@@ -215,7 +223,7 @@ body {
     position: absolute;
     width: 200%;
     left: -50%;
-    top: 0;
+    top: -1px;
     z-index: -1;
     height: 100%;
     object-fit: fill;
