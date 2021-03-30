@@ -1,0 +1,39 @@
+<div class="container">
+  <form class="p-4">
+    <h4 class="mb-4">Dental-Live Demo POC</h4>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">To Address</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">CC/BCC</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Subject</label>
+      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Message</label>
+      <textarea class="form-control" rows="4" cols="50"></textarea>
+    </div>
+    <label for="exampleInputPassword1" class="form-label">Recordings</label>
+    <div class="d-flex flex-wrap mb-4 border p-3 rounded">
+      <div class="col-md-4">
+        <h6>Record Video</h6>
+        <video id="video_{{idx}}" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+      </div>
+      <div class="col-md-4">
+        <h6>Record Audio</h6>
+        <audio id="audio_{{idx}}" class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></audio>
+      </div>
+      <div class="col-md-4">
+        <h6>Record Screen</h6>
+        <video id="screen_{{idx}}" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+      </div>
+    </div>
+    <div class="mx-auto w-25">
+      <button type="submit" class="btn btn-primary w-100">Send Mail</button>
+    </div>
+  </form>
+</div>
