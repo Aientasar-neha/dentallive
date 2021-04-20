@@ -1,4 +1,39 @@
 /* change player background color */
 .video-js {
-  background-color: #334c72;
+  background-color: rgba(0, 217, 204, 0.1);
+}
+
+.form-control,
+.form-select {
+  border: 1px solid #d8d4d4;
+  height: calc(2.5em + .75rem + 2px);
+  font-size: 0.85rem;
+  box-shadow: 0px 2px 2px 0px rgb(208 214 222 / 20%);
+}
+
+textarea {
+  height: auto !important;
+}
+
+.vjs-device-button {
+  font-size: 10px;
+  position: absolute;
+  z-index: 2;
+  top: calc(50% - 4em);
+  left: calc(50% - 2.5em);
+  cursor: pointer;
+  opacity: 1;
+  transition: all 0.4s;
+  text-align: center;
+  vertical-align: middle;
+  background-color: white;
+  box-shadow: none;
+  color: #00D9CC;
+  border-radius: 6px;
+  height: 4em;
+  width: 5em;
+}
+
+.recorders button {
+  background-color: #00D9CC;
 }

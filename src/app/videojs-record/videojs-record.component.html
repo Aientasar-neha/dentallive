@@ -1,39 +1,116 @@
-<div class="container">
-  <form class="p-4">
-    <h4 class="mb-4">Dental-Live Demo POC</h4>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">To Address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">CC/BCC</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Subject</label>
-      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Message</label>
-      <textarea class="form-control" rows="4" cols="50"></textarea>
-    </div>
-    <label for="exampleInputPassword1" class="form-label">Recordings</label>
-    <div class="d-flex flex-wrap mb-4 border p-3 rounded">
-      <div class="col-md-4">
-        <h6>Record Video</h6>
-        <video id="video_{{idx}}" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+<div class="container py-4">
+  <div class="row">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+      <h4 class="mb-4 mt-3 p-0">Compose Mail</h4>
+
+      <div class="mb-3 col-12">
+        <label class="form-label">Select Patient</label>
+        <select class="form-select" ngModel name="patienId" placeholder="Eg. Jhon Doe" required>
+          <option value="1">Patient 1</option>
+          <option value="2">Patient 2</option>
+          <option value="3">Patient 3</option>
+        </select>
       </div>
-      <div class="col-md-4">
-        <h6>Record Audio</h6>
-        <audio id="audio_{{idx}}" class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></audio>
+
+      <div class="mb-3 col-12">
+        <label class="form-label">To Address</label>
+        <input type="email" class="form-control" ngModel id="toAddresses" placeholder="Eg. jhon@gmail.com"
+          name="toAddresses" required>
       </div>
-      <div class="col-md-4">
-        <h6>Record Screen</h6>
-        <video id="screen_{{idx}}" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+
+      <div class="mb-3 col-12">
+        <label class="form-label">CC/BCC</label>
+        <input type="email" class="form-control" ngModel name="ccAddresses" placeholder="Eg. jane@gmail.com" required>
       </div>
-    </div>
-    <div class="mx-auto w-25">
-      <button type="submit" class="btn btn-primary w-100">Send Mail</button>
-    </div>
-  </form>
+
+      <div class="mb-3 col-12">
+        <label class="form-label">Subject</label>
+        <input type="text" class="form-control" placeholder="Eg. Dental summary" ngModel name="subject" required>
+      </div>
+
+      <div class="mb-3 col-12">
+        <label class="form-label">Message</label>
+        <textarea class="form-control" rows="4" cols="50"
+          placeholder="Eg. This video mail explains about the recent surgery......." ngModel name="message"
+          required></textarea>
+      </div>
+
+      <label class="form-label">Recordings</label>
+      <div class="mb-4 border p-4 rounded col-12">
+        <div class="row recorders">
+          <div class="col-md-4 ">
+            <h6>Record Video</h6>
+            <video id="videoPlayer" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+            <div class="row">
+              <div class="col-md-5"> <button type='button' [hidden]="!VideoPlayer.record().isRecording()"
+                  (click)="VideoPlayer.record().pause();" class="btn  w-100 m-1">Pause
+                  Recording</button> <button type='button' [hidden]="VideoPlayer.record().isRecording()"
+                  (click)="VideoPlayer.record().resume();" class="btn  w-100 m-1">Resume
+                  Recording</button></div>
+              <div class="col-md-5">
+                <button type='button' (click)="VideoPlayer.record().start();" class="btn  w-100 m-1">Start
+                  Recording</button>
+                <button type='button' (click)="VideoPlayer.record().stop();" class="btn  w-100 m-1">Stop
+                  Recording</button>
+              </div>
+            </div>
+            <input type="text" class="form-control w-100 m-1" #videoName placeholder="Video Record Name">
+            <button [disabled]="latestVideoRecord==null" type='button'
+              (click)="addVideo(videoName.value);videoName.value=''" class="btn  w-100 m-1">Add
+              Video</button>
+          </div>
+          <div class="col-md-4">
+            <h6>Record Audio</h6>
+            <audio id="audioPlayer" class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></audio>
+            <input type="text" class="form-control w-100 m-1" #audioName placeholder="Audio Record Name">
+            <button [disabled]="latestAudioRecord==null" type='button'
+              (click)="addAudio(audioName.value);audioName.value=''" class="btn  w-100 m-1">Add
+              Audio</button>
+          </div>
+          <div class="col-md-4">
+            <h6>Record Screen</h6>
+            <video id="screenPlayer" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+            <input type="text" class="form-control w-100 m-1" #screenName placeholder="Screen Record Name">
+
+            <div class="d-flex justify-content-between mt-2">
+              <button [disabled]="latestScreenRecord==null" type='button'
+                (click)="addScreen(screenName.value);screenName.value=''" class="btn w-100">Add
+                Recording</button>
+              <button type='button' style="background-color: #3ED7FF;" [disabled]="pipEnabled"
+                (click)="togglePictureInPicture()" class="btn ms-2"><i class="fas fa-video"></i></button>
+            </div>
+
+          </div>
+          <div class="d-none">
+            <video id="popupVideoPlayer" playsinline class="video-js vjs-default-skin w-100 mt-3 mb-3 rounded"></video>
+          </div>
+        </div>
+      </div>
+
+      <label class="form-label">Attachments</label>
+      <div class="col-md-12 mb-4 rounded p-5" style="background-color: rgb(230, 230, 230);">
+        <label class="d-block text-center fw-bold my-3" [hidden]="recordings.length>0">No files added,click
+          add
+          files button below to add files</label>
+        <ul class="list-group">
+          <li *ngFor="let files of recordings;let i=index" #attachment [@fadeInOnEnter] [@fadeOutOnLeave]
+            class="list-group-item">
+            <label>{{files.name}}</label>
+            <strong (click)="removeFiles(i,attachment)" style="cursor: pointer;"
+              class="float-end text-danger">Delete</strong>
+          </li>
+        </ul>
+        <div class="custom-file">
+          <input type="file" (change)="loadFiles($event)" multiple class="d-none custom-file-input" id="selectedFiles">
+          <label class="btn btn-outline d-block mx-auto w-25 my-3" style="border-color: #F7517F;color:#F7517F"
+            for="selectedFiles">Choose file</label>
+        </div>
+      </div>
+
+      <div class="mx-auto w-25">
+        <button [disabled]="!f.valid" type="submit" class="btn w-100" style="background-color: #0070D2;color:white">Send
+          Mail</button>
+      </div>
+    </form>
+  </div>
 </div>

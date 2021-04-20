@@ -1,0 +1,5 @@
+mail content 
+
+new line
+
+<a href="attachment_link"><img src="profile photo link" alt-text="video name"></a> (loop)

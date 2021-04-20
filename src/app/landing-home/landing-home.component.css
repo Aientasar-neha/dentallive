@@ -1,0 +1,36 @@
+@media (max-width: 768px) {
+  header {
+    min-height: 50vh !important;
+    margin-bottom: 3vh !important;
+    height: auto !important;
+    padding-bottom: 3em;
+  }
+}
+
+.lister span {
+  width: 10px;
+  height: 10px;
+  background-color: #D0D6DE;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.lister i {
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  border-color: #D0D6DE;
+  display: inline-flex;
+  justify-content: center;
+  color: #D0D6DE;
+
+}
+
+.lister span.rounded-pill {
+  width: 20px;
+}
+
+.lister .active {
+  background-color: #D0D6DE;
+  color: white
+}

@@ -1,31 +1,21 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import videojs from 'video.js';
-import * as adapter from 'webrtc-adapter/out/adapter_no_global.js';
-import * as RecordRTC from 'recordrtc';
-// Required imports when recording audio-only using the videojs-wavesurfer plugin
 import * as Wavesurfer from 'videojs-wavesurfer/dist/videojs.wavesurfer.js';
 import * as MicrophonePlugin from 'wavesurfer.js/dist/plugin/wavesurfer.microphone.js';
 Wavesurfer.microphone = MicrophonePlugin;
-// Register videojs-wavesurfer plugin
-
-// register videojs-record plugin with this import
 import * as Record from 'videojs-record/dist/videojs.record.js';
+import { EmailService } from '../email.service';
+import swal from 'sweetalert';
 
 @Component({
   selector: 'app-videojs-record',
   templateUrl: './videojs-record.component.html',
   styleUrls: ['./videojs-record.component.css']
 })
-export class VideojsRecordComponent implements OnInit, OnDestroy {
+export class VideojsRecordComponent implements OnDestroy {
 
-  // reference to the element itself: used to access events and methods
-  private _elementRef: ElementRef
-
-  // index to create unique ID for component
-  idx = 'clip1';
-
-  private config: any;
-  private player: any;
+  private VideoConfig: any;
+  VideoPlayer: any;
 
   private audioConfig: any;
   private audioPlayer: any;
@@ -33,21 +23,37 @@ export class VideojsRecordComponent implements OnInit, OnDestroy {
   private screenConfig: any;
   private screenPlayer: any;
 
+  private popupVideoConfig: any;
+  private popupVideoPlayer: any;
+
   private plugin: any;
 
-  // constructor initializes our declared vars
-  constructor(elementRef: ElementRef) {
-    this.player = false;
+  latestVideoRecord = null;
+  latestAudioRecord = null;
+  latestScreenRecord = null;
+
+  recordings = [];
+  private attachmentNames = [];
+
+  //supply headers
+  private profile: any;
+  private inReplyTo: string;
+  private references: string;
+  private subUserId: number;
+  private fromAddress: string;
+  private username: string;
+  private form: any;
+
+  initPlayers() {
+    this.VideoPlayer = false;
     this.audioPlayer = false;
     this.screenPlayer = false;
-
-    // save reference to plugin (so it initializes)
+    this.popupVideoPlayer = false;
     this.plugin = Record;
 
-    // video.js configuration
-    this.config = {
+    this.VideoConfig = {
       controls: true,
-      bigPlayButton: false,
+      bigPlayButton: true,
       width: 320,
       height: 240,
       plugins: {
@@ -107,138 +113,76 @@ export class VideojsRecordComponent implements OnInit, OnDestroy {
         record: {
           audio: true,
           screen: true,
+          maxLength: 60,
+          pip: true
+        }
+      }
+    };
+
+    this.popupVideoConfig = {
+      controls: false,
+      bigPlayButton: false,
+      width: 320,
+      height: 240,
+      plugins: {
+        record: {
+          audio: false,
+          video: true,
+          pip: true,
         }
       }
     };
   }
 
-  ngOnInit() { }
+  // constructor initializes our declared vars
+  constructor(private Service: EmailService) {
+    this.initPlayers();
 
-  // use ngAfterViewInit to make sure we initialize the videojs element
-  // after the component template itself has been rendered
+    this.username = "Mohd Nihar";
+    this.profile = "https://images.theconversation.com/files/304957/original/file-20191203-66986-im7o5.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip";
+    this.subUserId = 123;
+    this.fromAddress = "niharTest@dentallive.tk"
+
+  }
+
   ngAfterViewInit() {
-    // ID with which to access the template's video element
-    let el = 'video_' + this.idx;
-    let el1 = 'audio_' + this.idx;
-    let el2 = 'screen_' + this.idx;
 
-    // setup the player via the unique element ID
-    this.player = videojs(document.getElementById(el), this.config, () => {
-      console.log('player ready! id:', el);
+    this.VideoPlayer = videojs(document.getElementById('videoPlayer'), this.VideoConfig);
 
-      // print version information at startup
-      var msg = 'Using video.js ' + videojs.VERSION +
-        ' with videojs-record ' + videojs.getPluginVersion('record') +
-        ' and recordrtc ' + RecordRTC.version;
-      videojs.log(msg);
+    this.VideoPlayer.on('finishRecord', () => {
+      this.latestVideoRecord = this.VideoPlayer.recordedData;
+      this.VideoPlayer.record().stopDevice();
     });
 
-    // device is ready
-    this.player.on('deviceReady', () => {
-      console.log('device is ready!');
-    });
-
-    // user clicked the record button and started recording
-    this.player.on('startRecord', () => {
-      console.log('started recording!');
-    });
-
-    // user completed recording and stream is available
-    this.player.on('finishRecord', () => {
-      // recordedData is a blob object containing the recorded data that
-      // can be downloaded by the user, stored on server etc.
-      console.log('finished recording: ', this.player.recordedData);
-    });
-
-    // error handling
-    this.player.on('error', (element, error) => {
-      console.warn(error);
-    });
-
-    this.player.on('deviceError', () => {
-      console.error('device error:', this.player.deviceErrorCode);
-    });
-
-    // setup the player via the unique element ID
-    this.audioPlayer = videojs(document.getElementById(el1), this.audioConfig, () => {
-      console.log('player ready! id:', el);
-
-      // print version information at startup
-      var msg = 'Using video.js ' + videojs.VERSION +
-        ' with videojs-record ' + videojs.getPluginVersion('record') +
-        ' and recordrtc ' + RecordRTC.version;
-      videojs.log(msg);
-    });
-
-    // device is ready
-    this.audioPlayer.on('deviceReady', () => {
-      console.log('device is ready!');
-    });
-
-    // user clicked the record button and started recording
-    this.audioPlayer.on('startRecord', () => {
-      console.log('started recording!');
-    });
-
-    // user completed recording and stream is available
+    this.audioPlayer = videojs(document.getElementById('audioPlayer'), this.audioConfig);
     this.audioPlayer.on('finishRecord', () => {
-      // recordedData is a blob object containing the recorded data that
-      // can be downloaded by the user, stored on server etc.
-      console.log('finished recording: ', this.audioPlayer.recordedData);
+      this.latestAudioRecord = this.audioPlayer.recordedData;
+      this.audioPlayer.record().stopDevice();
     });
 
-    // error handling
-    this.audioPlayer.on('error', (element, error) => {
-      console.warn(error);
-    });
-
-    this.audioPlayer.on('deviceError', () => {
-      console.error('device error:', this.audioPlayer.deviceErrorCode);
-    });
-
-    // setup the player via the unique element ID
-    this.screenPlayer = videojs(document.getElementById(el2), this.screenConfig, () => {
-      console.log('player ready! id:', el);
-
-      // print version information at startup
-      var msg = 'Using video.js ' + videojs.VERSION +
-        ' with videojs-record ' + videojs.getPluginVersion('record') +
-        ' and recordrtc ' + RecordRTC.version;
-      videojs.log(msg);
-    });
-
-    // device is ready
-    this.screenPlayer.on('deviceReady', () => {
-      console.log('device is ready!');
-    });
-
-    // user clicked the record button and started recording
-    this.screenPlayer.on('startRecord', () => {
-      console.log('started recording!');
-    });
-
-    // user completed recording and stream is available
+    this.screenPlayer = videojs(document.getElementById('screenPlayer'), this.screenConfig);
     this.screenPlayer.on('finishRecord', () => {
-      // recordedData is a blob object containing the recorded data that
-      // can be downloaded by the user, stored on server etc.
-      console.log('finished recording: ', this.audioPlayer.recordedData);
+      this.latestScreenRecord = this.screenPlayer.recordedData;
+      this.screenPlayer.record().stopDevice();
     });
 
-    // error handling
-    this.screenPlayer.on('error', (element, error) => {
-      console.warn(error);
+    this.popupVideoPlayer = videojs(document.getElementById('popupVideoPlayer'), this.popupVideoConfig);
+    this.popupVideoPlayer.on('deviceReady', () => {
+      console.log('device reday');
+      this.popupVideoPlayer.requestPictureInPicture();
     });
-
-    this.screenPlayer.on('deviceError', () => {
-      console.error('device error:', this.audioPlayer.deviceErrorCode);
+    this.popupVideoPlayer.on('leavePIP', () => {
+      console.log('leavePIP');
+      this.popupVideoPlayer.record().stopDevice();
+      this.pipEnabled = false;
     });
   }
 
-  // use ngOnDestroy to detach event handlers and remove the player
+  // use ngOnDestroy to detach event handlers and remove the VideoPlayer
   ngOnDestroy() {
-    if (this.player) {
-      this.player.dispose();
-      this.player = false;
+    if (this.VideoPlayer) {
+      this.VideoPlayer.dispose();
+      this.VideoPlayer = false;
     }
     if (this.audioPlayer) {
       this.audioPlayer.dispose();
@@ -246,9 +190,146 @@ export class VideojsRecordComponent implements OnInit, OnDestroy {
     }
     if (this.screenPlayer) {
       this.screenPlayer.dispose();
-      this.screenPlayer.
-        this.screenPlayer = false;
+      this.screenPlayer = false;
     }
+    if (this.popupVideoPlayer) {
+      this.popupVideoPlayer.dispose();
+      this.popupVideoPlayer = false;
+    }
+  }
+
+  addVideo(name) {
+    name = name + ".MP4"
+    if (this.latestVideoRecord) {
+      this.recordings.push({ 'name': name, 'data': this.latestVideoRecord });
+      this.latestVideoRecord = null;
+      this.VideoPlayer.record().reset();
+    }
+  }
+
+  addAudio(name) {
+    name = name + ".MP3"
+    if (this.latestAudioRecord) {
+      this.recordings.push({ 'name': name, 'data': this.latestAudioRecord });
+      this.latestAudioRecord = null;
+      this.audioPlayer.record().reset();
+    }
+  }
+
+  addScreen(name) {
+    name = name + ".MP4"
+    if (this.latestScreenRecord) {
+      this.recordings.push({ 'name': name, 'data': this.latestScreenRecord });
+      this.latestScreenRecord = null;
+      this.screenPlayer.record().reset();
+    }
+  }
+
+  pipEnabled = false;
+  togglePictureInPicture() {
+    if (!('pictureInPictureEnabled' in document)) {
+      swal("Your Browser dosent support this feature,please use Goole Chrome or Safari for this Feature");
+    } else {
+      if (!this.pipEnabled) {
+        this.popupVideoPlayer.record().getDevice();
+      }
+      this.pipEnabled = !this.pipEnabled;
+    }
+  }
+
+  saveFile(elem) {
+    this.Service.getPreSignedUrl(elem.name)
+      .subscribe(Response => {
+        if (!Response || !Response['url'])
+          return swal("Error sending email,please try again");
+        this.Service.saveDataS3(elem.data, Response['url'])
+          .subscribe(Response_nested => {
+            this.attachmentNames.push({ 'name': elem.name, 'url': Response['url'] })
+            this.recordings.splice(this.recordings.indexOf(elem), 1);
+            console.log(Response_nested);
+            if (this.recordings.length == 0) {
+              this.savetoDB();
+            }
+          }, error => {
+            console.log(error);
+            swal("Error sending email,please try again");
+          })
+      }, error => {
+        console.log(error);
+        swal("Error sending email,please try again");
+      })
+  }
+
+  savetoDB() {
+    //create html div and text using links
+    let htmlText = this.form.value.message;
+    let plainText = this.form.value.message + "\n";
+    this.attachmentNames.forEach(element => {
+      htmlText = htmlText + '<br><br><br><a style="margin-top:10px;display: inline-block;width: 200px;margin-right: 20px;" href="' + element.url + '" target="_blank"><img src="' + this.profile + '" alt="' + element.name + '" width="200"><strong style="display:block;width:100%;text-align:center;margin-top:15px;">' + element.name + '</strong></a>'
+      plainText = plainText + '\n\n' + element.url + '\n' + element.name;
+    });
+
+    let json: JSON = this.form.value;
+    json['name'] = this.username;
+    json['fromAddress'] = this.fromAddress;
+    json['inReplyTo'] = this.inReplyTo;
+    json['references'] = this.references;
+    json['subUserId'] = this.subUserId;
+    json['htmlText'] = htmlText;
+    json['plainText'] = plainText;
+
+    this.Service.sendMail(json)
+      .subscribe(Response => {
+        swal("Email sent succesfully");
+      }, error => {
+        console.log(error);
+        swal("Error sending email,please try again");
+      })
+  }
+
+  loadFiles = function (event) {
+    console.log(event);
+    if (event.target.files.length > 0) {
+      Array.from(event.target.files).forEach(element => {
+        this.recordings.push({ 'name': element["name"], 'data': element });
+      });
+    }
+  }
+
+  removeFiles(index, attachment) {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this file!",
+      icon: "warning",
+      buttons: ['Cancel', 'Ok'],
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          attachment.classList.add('animate__fadeOutRightBig');
+          setTimeout(() => {
+            attachment.classList.add('animate__slideOutUp');
+          }, 500);
+          setTimeout(() => {
+            this.recordings.splice(index, 1);
+          }, 1000);
+        }
+      });
+  }
+
+  onSubmit = function (form) {
+    this.form = form;
+
+    if (this.recordings.length == 0) {
+      this.savetoDB();
+      return;
+    }
+
+    //get all s3 links
+    this.recordings.forEach(elem => {
+      console.log(elem);
+      this.saveFile(elem);
+    });
   }
 
 }
