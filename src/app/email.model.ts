@@ -1,0 +1,28 @@
+export interface mail {
+    pk: string,
+    sk: string,
+    MailFrom: string,
+    MailTo: string,
+    MailCc: string,
+    inReplyTo: string,
+    references: string,
+    mailDateTime: string,
+    subject: string,
+    messageId: string,
+    s3link: string,
+    patientId: string,
+    subUserId: string,
+    htmlText: string,
+    plainText: string,
+}
+export interface patient {
+    pk: string,
+    sk: string,
+    PatientfirstName: string,
+    PatientlastName: string,
+    emailAddress: string,
+    freeze: string,
+    imageSrc: string,
+    patientId: string,
+    phoneNumber: string,
+}

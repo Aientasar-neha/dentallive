@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~video.js/dist/video-js.css';
 @import '~videojs-record/dist/css/videojs.record.css';
-@import url('https://fonts.googleapis.com/css2?family=Sintony:wght@400;700&display=swap');
 
 body {
   background-color: #f7f9fb;
@@ -10,11 +9,56 @@ body {
   font-size: 0.85rem;
 }
 
+body * {
+  outline: none;
+}
+
 html,
 body {
   height: 100%;
 }
 
-.row {
-  width: 100%;
+.vjs-record .vjs-pip-button.vjs-control {
+  display: none !important;
+}
+
+.text-info {
+  color: #00bcb0 !important;
+}
+
+
+.btn-secondary {
+  color: rgb(37, 37, 37);
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.btn-secondary:hover {
+  color: rgb(37, 37, 37);
+  background-color: rgb(209, 207, 207);
+  border-color: rgb(209, 207, 207);
+}
+
+.vjs-device-button {
+  font-size: 10px !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  top: calc(50% - 2em) !important;
+  left: calc(50% - 0em) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  transition: all 0.4s !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  background-color: white !important;
+  box-shadow: none !important;
+  color: #00D9CC !important;
+  border-radius: 6px !important;
+  height: 4em !important;
+  width: 5em !important;
+}
+
+.ng-invalid.ng-touched {
+  border-color: #dc3545;
+  border-width: 2px;
 }

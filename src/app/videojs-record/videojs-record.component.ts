@@ -6,6 +6,8 @@ Wavesurfer.microphone = MicrophonePlugin;
 import * as Record from 'videojs-record/dist/videojs.record.js';
 import { EmailService } from '../email.service';
 import swal from 'sweetalert';
+import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-videojs-record',
@@ -18,10 +20,10 @@ export class VideojsRecordComponent implements OnDestroy {
   VideoPlayer: any;
 
   private audioConfig: any;
-  private audioPlayer: any;
+  audioPlayer: any;
 
   private screenConfig: any;
-  private screenPlayer: any;
+  screenPlayer: any;
 
   private popupVideoConfig: any;
   private popupVideoPlayer: any;
@@ -34,6 +36,15 @@ export class VideojsRecordComponent implements OnDestroy {
 
   recordings = [];
   private attachmentNames = [];
+
+  StepVideo = 1;
+  StepAudio = 1;
+  StepScreen = 1;
+
+  sending = false;
+  invalidForm = false;
+
+  fileURL = "http://mail.dentallive.s3-website-us-west-2.amazonaws.com/file/";
 
   //supply headers
   private profile: any;
@@ -53,31 +64,32 @@ export class VideojsRecordComponent implements OnDestroy {
 
     this.VideoConfig = {
       controls: true,
-      bigPlayButton: true,
       width: 320,
       height: 240,
       plugins: {
         record: {
           audio: true,
-          video: true,
-          maxLength: 20,
+          maxLength: 1800,
+          video: {
+            width: { min: 1024, ideal: 1280, max: 1920 },
+            height: { min: 576, ideal: 720, max: 1080 }
+          },
+          // dimensions of captured video frames
+          frameWidth: 1920,
+          frameHeight: 1080
         }
       }
     };
 
     this.audioConfig = {
       controls: true,
-      bigPlayButton: false,
       width: 320,
       height: 240,
       plugins: {
         wavesurfer: {
           backend: 'WebAudio',
-          waveColor: '#fff',
+          waveColor: '#D32F2F',
           progressColor: 'black',
-          displayMilliseconds: true,
-          debug: true,
-          cursorWidth: 1,
           hideScrollbar: true,
           plugins: [
             // enable microphone plugin
@@ -95,7 +107,7 @@ export class VideojsRecordComponent implements OnDestroy {
         record: {
           audio: true,
           video: false,
-          maxLength: 20,
+          maxLength: 1800,
         }
       }
     }
@@ -105,15 +117,11 @@ export class VideojsRecordComponent implements OnDestroy {
       bigPlayButton: false,
       width: 320,
       height: 240,
-      fluid: false,
-      controlBar: {
-        fullscreenToggle: false
-      },
       plugins: {
         record: {
           audio: true,
           screen: true,
-          maxLength: 60,
+          maxLength: 1800,
           pip: true
         }
       }
@@ -121,7 +129,6 @@ export class VideojsRecordComponent implements OnDestroy {
 
     this.popupVideoConfig = {
       controls: false,
-      bigPlayButton: false,
       width: 320,
       height: 240,
       plugins: {
@@ -135,13 +142,13 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   // constructor initializes our declared vars
-  constructor(private Service: EmailService) {
+  constructor(private router: Router, private Service: EmailService) {
     this.initPlayers();
 
-    this.username = "Mohd Nihar";
-    this.profile = "https://images.theconversation.com/files/304957/original/file-20191203-66986-im7o5.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip";
+    this.username = "Dental-Live Admin";
+    this.profile = "https://www.atpplanner.com/users/17.jpg?timestamp=1619256767817";
     this.subUserId = 123;
-    this.fromAddress = "niharTest@dentallive.tk"
+    this.fromAddress = "admin@dentallive.tk"
 
   }
 
@@ -153,6 +160,14 @@ export class VideojsRecordComponent implements OnDestroy {
       this.latestVideoRecord = this.VideoPlayer.recordedData;
       this.VideoPlayer.record().stopDevice();
     });
+    this.VideoPlayer.on('deviceError', (e) => console.log(e));
+    this.VideoPlayer.on('error', (e) => console.log(e));
+    this.VideoPlayer.on('deviceReady', () => this.StepVideo = 2);
+    this.VideoPlayer.on('startRecord', () => this.StepVideo = 3);
+    this.VideoPlayer.on('stopRecord', () => {
+      if (this.StepVideo != 5)
+        this.StepVideo = 5;
+    });
 
     this.audioPlayer = videojs(document.getElementById('audioPlayer'), this.audioConfig);
     this.audioPlayer.on('finishRecord', () => {
@@ -160,10 +175,24 @@ export class VideojsRecordComponent implements OnDestroy {
       this.audioPlayer.record().stopDevice();
     });
 
+    this.audioPlayer.on('deviceReady', () => this.StepAudio = 2);
+    this.audioPlayer.on('startRecord', () => this.StepAudio = 3);
+    this.audioPlayer.on('stopRecord', () => {
+      if (this.StepAudio != 5)
+        this.StepAudio = 5
+    });
+
     this.screenPlayer = videojs(document.getElementById('screenPlayer'), this.screenConfig);
     this.screenPlayer.on('finishRecord', () => {
       this.latestScreenRecord = this.screenPlayer.recordedData;
       this.screenPlayer.record().stopDevice();
+    });
+
+    this.screenPlayer.on('deviceReady', () => this.StepScreen = 2);
+    this.screenPlayer.on('startRecord', () => this.StepScreen = 3);
+    this.screenPlayer.on('stopRecord', () => {
+      if (this.StepScreen != 5)
+        this.StepScreen = 5
     });
 
     this.popupVideoPlayer = videojs(document.getElementById('popupVideoPlayer'), this.popupVideoConfig);
@@ -199,7 +228,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   addVideo(name) {
-    name = name + ".MP4"
+    name = name + ".mp4"
     if (this.latestVideoRecord) {
       this.recordings.push({ 'name': name, 'data': this.latestVideoRecord });
       this.latestVideoRecord = null;
@@ -208,7 +237,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   addAudio(name) {
-    name = name + ".MP3"
+    name = name + ".mp3"
     if (this.latestAudioRecord) {
       this.recordings.push({ 'name': name, 'data': this.latestAudioRecord });
       this.latestAudioRecord = null;
@@ -217,7 +246,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   addScreen(name) {
-    name = name + ".MP4"
+    name = name + ".mp4"
     if (this.latestScreenRecord) {
       this.recordings.push({ 'name': name, 'data': this.latestScreenRecord });
       this.latestScreenRecord = null;
@@ -238,7 +267,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   saveFile(elem) {
-    this.Service.getPreSignedUrl(elem.name)
+    this.Service.getPreSignedUrl(elem.name, 'put')
       .subscribe(Response => {
         if (!Response || !Response['url'])
           return swal("Error sending email,please try again");
@@ -253,10 +282,12 @@ export class VideojsRecordComponent implements OnDestroy {
           }, error => {
             console.log(error);
             swal("Error sending email,please try again");
+            this.sending = false;
           })
       }, error => {
         console.log(error);
         swal("Error sending email,please try again");
+        this.sending = false;
       })
   }
 
@@ -265,8 +296,8 @@ export class VideojsRecordComponent implements OnDestroy {
     let htmlText = this.form.value.message;
     let plainText = this.form.value.message + "\n";
     this.attachmentNames.forEach(element => {
-      htmlText = htmlText + '<br><br><br><a style="margin-top:10px;display: inline-block;width: 200px;margin-right: 20px;" href="' + element.url + '" target="_blank"><img src="' + this.profile + '" alt="' + element.name + '" width="200"><strong style="display:block;width:100%;text-align:center;margin-top:15px;">' + element.name + '</strong></a>'
-      plainText = plainText + '\n\n' + element.url + '\n' + element.name;
+      htmlText = htmlText + '<br><br><br><a style="margin-top:10px;display: inline-block;width: 200px;margin-right: 20px;" href="' + this.fileURL + element.name + '" target="_blank"><img src="' + this.profile + '" alt="' + element.name + '" width="200"><strong style="display:block;width:100%;text-align:center;margin-top:15px;">' + element.name + '</strong></a>'
+      plainText = plainText + '\n\n' + this.fileURL + element.name + '\n' + element.name;
     });
 
     let json: JSON = this.form.value;
@@ -281,9 +312,12 @@ export class VideojsRecordComponent implements OnDestroy {
     this.Service.sendMail(json)
       .subscribe(Response => {
         swal("Email sent succesfully");
+        this.sending = false;
+        this.router.navigate(['/mail/inbox']);
       }, error => {
         console.log(error);
         swal("Error sending email,please try again");
+        this.sending = false;
       })
   }
 
@@ -297,6 +331,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   removeFiles(index, attachment) {
+    console.log(this.recordings);
     swal({
       title: "Are you sure?",
       text: "Once deleted, you will not be able to recover this file!",
@@ -306,18 +341,24 @@ export class VideojsRecordComponent implements OnDestroy {
     })
       .then((willDelete) => {
         if (willDelete) {
-          attachment.classList.add('animate__fadeOutRightBig');
-          setTimeout(() => {
-            attachment.classList.add('animate__slideOutUp');
-          }, 500);
+          attachment.classList.add('animate__lightSpeedOutRight');
           setTimeout(() => {
             this.recordings.splice(index, 1);
-          }, 1000);
+            console.log(this.recordings);
+          }, 500);
         }
       });
   }
 
-  onSubmit = function (form) {
+  onSubmit = function (form: NgForm) {
+
+    if (form.invalid) {
+      form.form.markAllAsTouched();
+      this.invalidForm = true;
+      return;
+    }
+
+    this.sending = true;
     this.form = form;
 
     if (this.recordings.length == 0) {
@@ -327,7 +368,6 @@ export class VideojsRecordComponent implements OnDestroy {
 
     //get all s3 links
     this.recordings.forEach(elem => {
-      console.log(elem);
       this.saveFile(elem);
     });
   }

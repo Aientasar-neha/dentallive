@@ -1,0 +1,66 @@
+<div class="container mt-5">
+  <h4 class="mb-4 mt-3 p-0">Add Patient</h4>
+  <ng-form #f="ngForm" id="mainForm" (ngSubmit)="onSubmit(f)">
+    <div class="row mb-4">
+      <div class="col-md-4 mb-4">
+        <img #patientImg [src]="imageSrc?imageSrc:'../assets/patient.png'" class="img-thumbnail rounded">
+        <div class="d-grid gap-2 mt-2">
+          <input type="file" accept="image/x-png,image/gif,image/jpeg" (change)="loadFiles($event)"
+            class="d-none custom-file-input" id="selectedFiles">
+          <label class="btn btn-primary" for="selectedFiles">Upload</label>
+          <button (click)="removeFile();" type="button" class="btn btn-secondary border d-block">remove</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">First name</label>
+              <input type="text" required class="form-control" ngModel name="PatientfirstName" placeholder="Jhon">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Last name</label>
+              <input type="text" required class="form-control" ngModel name="PatientlastName" placeholder="Doe">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label class="form-label">Email address</label>
+              <input type="email" required class="form-control" ngModel name="emailAddress" pattern="[^ @]*@[^ @]*"
+                placeholder="jhondoe@example.com">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label class="form-label">Phone number</label>
+              <input type="text" class="form-control" ngModel name="phoneNumber" placeholder="(250) 555-0199">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row gx-2 mt-3">
+              <div class="col-md-4">
+                <button [disabled]="sending" type="button"
+                  class="btn btn-secondary w-100 border mb-3 mb-md-0">Cancel</button>
+              </div>
+              <div class="col-md-4 order-md-3">
+                <button *ngIf="!freeze" (click)="onSubmit(f)" [disabled]="sending" type="submit"
+                  class="btn btn-primary w-100 mb-3 mb-md-0">
+                  <span *ngIf="!edit">Add</span><span *ngIf="edit">Update</span>
+                </button>
+              </div>
+              <div class="col-md-4 ">
+                <button [disabled]="sending" *ngIf="edit" type="button" class="btn btn-danger w-100">
+                  <span (click)="deleteItem()" *ngIf="!touched">Delete</span>
+                  <span (click)="freezeItem(true)" *ngIf="touched && !freeze">Freeze</span><span
+                    (click)="freezeItem(false)" *ngIf="touched && freeze">UnFreeze</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-form>

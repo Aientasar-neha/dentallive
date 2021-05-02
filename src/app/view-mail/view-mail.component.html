@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-12">
+      <h3 class="h3" [routerLink]="backLink"><i
+          class="fa fa-chevron-left me-3 border rounded p-2 text-black-50"></i>{{message?.subject}}</h3>
+      <div class=" row mt-4 border-top border-bottom pt-4 pb-2 px-2 rounded">
+        <div class="col-md-8 mb-2 fw-bold text-break" [innerHTML]="fromHtml"></div>
+        <small class="col-md-4 text-md-end text-break">{{message?.mailDateTime | date:'medium'}}</small>
+      </div>
+      <div class="my-4" [innerHTML]="message?.htmlText"></div>
+    </div>
+  </div>
+</div>

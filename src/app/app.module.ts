@@ -1,6 +1,6 @@
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,14 +19,33 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { LandingHomeComponent } from './landing-home/landing-home.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { ViewMailComponent } from './view-mail/view-mail.component';
+import { ViewAttachmentComponent } from './view-attachment/view-attachment.component';
+import { NgxShimmerLoadingModule } from 'ngx-shimmer-loading';
+import { MatSortModule } from '@angular/material';
+import { ContactsComponent } from './contacts/contacts.component';
+import { PatientsComponent } from './patients/patients.component';
+import { AccountComponent } from './account/account.component';
+import { MailSentComponent } from './mail-sent/mail-sent.component';
+import { AddPatientComponent } from './add-patient/add-patient.component';
 
 @NgModule({
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
+  ],
   declarations: [
     AppComponent,
     VideojsRecordComponent,
     DentalLiveMailMainComponent,
     MailInboxComponent,
     LandingHomeComponent,
+    ViewMailComponent,
+    ViewAttachmentComponent,
+    ContactsComponent,
+    PatientsComponent,
+    AccountComponent,
+    MailSentComponent,
+    AddPatientComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +60,9 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
     MatInputModule,
     MatTableModule,
     MatPaginatorModule,
-    AngularFontAwesomeModule
+    AngularFontAwesomeModule,
+    NgxShimmerLoadingModule,
+    MatSortModule
   ],
   providers: [
     EmailService

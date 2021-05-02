@@ -15,25 +15,26 @@ textarea {
   height: auto !important;
 }
 
-.vjs-device-button {
-  font-size: 10px;
-  position: absolute;
-  z-index: 2;
-  top: calc(50% - 4em);
-  left: calc(50% - 2.5em);
-  cursor: pointer;
-  opacity: 1;
-  transition: all 0.4s;
-  text-align: center;
-  vertical-align: middle;
-  background-color: white;
-  box-shadow: none;
-  color: #00D9CC;
-  border-radius: 6px;
-  height: 4em;
-  width: 5em;
+.recorders button {
+  background-color: #00bcb0;
+  color: white;
 }
 
-.recorders button {
-  background-color: #00D9CC;
+.vjs-device-button {
+  font-size: 10px !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  top: calc(50% - 2em) !important;
+  left: calc(50% - 0em) !important;
+  cursor: pointer !important;
+  opacity: 1 !important;
+  transition: all 0.4s !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  background-color: white !important;
+  box-shadow: none !important;
+  color: #00D9CC !important;
+  border-radius: 6px !important;
+  height: 4em !important;
+  width: 5em !important;
 }

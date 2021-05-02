@@ -1,26 +1,23 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { patient } from './../email.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { mail } from '../email.model';
 import { EmailService } from '../email.service';
 
 @Component({
-  selector: 'app-mail-inbox',
-  templateUrl: './mail-inbox.component.html',
-  styleUrls: ['./mail-inbox.component.css']
+  selector: 'app-patients',
+  templateUrl: './patients.component.html',
+  styleUrls: ['./patients.component.css']
 })
-export class MailInboxComponent implements OnInit, AfterViewInit {
+export class PatientsComponent implements OnInit {
 
   private user = "mohdnihar@gmail.com"
-  private type = "INC"
-  private patientId = 0;
-  private subUserId = 0;
-  data = { "user": this.user, "mailType": this.type, "pid": this.patientId, "sid": this.subUserId, "type": 0 }
+  data = { "user": this.user }
   shimmer = Array;
   loading = true;
 
-  mails: mail[] = [];
-  displayedColumns: string[] = ['MailFrom', 'subject', 'mailDateTime'];
-  dataSource: MatTableDataSource<mail>;
+  patients: patient[] = [];
+  displayedColumns: string[] = ['PatientfirstName', 'emailAddress', 'phoneNumber'];
+  dataSource: MatTableDataSource<patient>;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
@@ -31,12 +28,12 @@ export class MailInboxComponent implements OnInit, AfterViewInit {
   }
 
   fetchData() {
-    this.Service.readallMaildata(this.data)
+    this.Service.readPatientdata(this.data)
       .subscribe(Response => {
         console.log(Response);
         if (Response) {
-          this.Service.updateMailData(Response);
-          this.dataSource = new MatTableDataSource(this.Service.sharedEmailData.value);
+          this.Service.updatePatientData(Response);
+          this.dataSource = new MatTableDataSource(this.Service.sharedPatientData.value);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
           this.loading = false;
@@ -58,3 +55,5 @@ export class MailInboxComponent implements OnInit, AfterViewInit {
     }
   }
 }
+
+
