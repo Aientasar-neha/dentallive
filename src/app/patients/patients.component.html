@@ -7,7 +7,9 @@
         <div class="form-group float-right d-flex">
           <input (keyup)="applyFilter($event.target.value)" type="email" class="form-control me-2" id="search"
             placeholder="Search">
-          <i (click)="fetchData()" class="float-end fa fa-refresh border rounded p-2 text-black-50"></i>
+          <i (click)="fetchData()" class="float-end fa fa-refresh border rounded p-2 me-2 text-black-50"></i>
+          <a routerLink="/mail/patients/patient"><i
+              class="float-end fa fa-plus border rounded p-2 text-black-50"></i></a>
         </div>
       </h4>
       <div>

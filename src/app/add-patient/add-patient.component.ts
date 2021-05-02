@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert';
@@ -12,66 +12,85 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class AddPatientComponent implements OnInit {
 
-  edit = false;
+  edit: boolean;
   picData: any;
   imageSrc: string;
-  sending = false;
+  sending: boolean;
   id: any;
-  freeze = false;
-  touched = false;
-  removeImage = false;
-
+  freeze: boolean;
+  touched: boolean;
+  removeImage: boolean;
+  patient: any;
+  imageName: string;
   private user = "mohdnihar@gmail.com"
-  @ViewChild(NgForm, { static: false }) mainForm: NgForm;
 
-  constructor(private router: Router, private Service: EmailService, private route: ActivatedRoute) { }
+  constructor(private router: Router, private Service: EmailService, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.edit = false;
+    this.sending = false;
+    this.freeze = false;
+    this.touched = false;
+    this.removeImage = false;
+    this.id = null;
+    this.patient = {
+      PatientfirstName: "",
+      PatientlastName: "",
+      emailAddress: "",
+      phoneNumber: ""
+    };
     this.route.paramMap.subscribe(params => {
       if (params.get('id') && params.get('id') != "") {
+        this.sending = true;
         let result = this.Service.sharedPatientData.value;
-        let patient;
         if (result.length > 0) {
-          patient = result.find(t => t.patientId == params.get('id'));
-          this.setValue(patient);
+          let Response = result.find(t => t.patientId == params.get('id'));
+          Object.keys(Response).forEach(key => {
+            if (key in this.patient)
+              this.patient[key] = Response[key];
+          });
+          this.changeDetectorRef.detectChanges();
+          this.setValue(Response);
         }
-        if (!patient) {
+        if (result.length == 0) {
           let data = { "user": this.user, "patientId": params.get('id') }
           this.Service.readPatientdata(data)
             .subscribe(Response => {
               if (Response) {
-                patient = Response;
-                this.setValue(patient);
+                Object.keys(Response).forEach(key => {
+                  if (key in this.patient)
+                    this.patient[key] = Response[key];
+                });
+                this.changeDetectorRef.detectChanges();
+                this.setValue(Response);
               }
             }, error => {
               console.log(error);
               return null;
             })
         }
-      } else {
-        swal("unable to load patient,please try again later");
-        this.router.navigate(['/mail/patients']);
       }
     });
   }
 
   setValue(patient) {
-    Object.keys(this.mainForm.controls).forEach(key => {
-      if (patient[key])
-        this.mainForm.controls[key].setValue(patient[key]);
-    });
+    this.changeDetectorRef.detectChanges();
     this.id = patient.patientId;
     this.edit = true;
     this.freeze = patient.freeze;
     this.touched = patient.touched ? patient.touched : false;
+    this.imageName = patient.imageSrc
 
     if (patient.imageSrc) {
       this.Service.getPreSignedUrl(patient.imageSrc, 'get', "dentallive-patients")
         .subscribe(Response => {
+          this.sending = false;
           if (Response["url"]) {
             this.imageSrc = Response["url"];
           }
         });
+    } else {
+      this.sending = false;
     }
   }
 
@@ -104,8 +123,10 @@ export class AddPatientComponent implements OnInit {
       json['imageSrc'] = newImagename;
     else if (this.removeImage)
       json['imageSrc'] = "";
+    else if (this.imageName)
+      json['imageSrc'] = this.imageName;
     else
-      json['imageSrc'] = this.imageSrc;
+      json['imageSrc'] = "";
 
     if (!this.edit)
       json['touched'] = false;
@@ -118,7 +139,7 @@ export class AddPatientComponent implements OnInit {
         this.edit ? swal("Patient data updated succesfully") : swal("Patient data saved succesfully");
         this.sending = false;
         this.id = null;
-        //this.router.navigate(['/mail/patients']);
+        this.router.navigate(['/mail/patients']);
       }, error => {
         console.log(error);
         swal("Error saving data,please try again");
@@ -167,12 +188,13 @@ export class AddPatientComponent implements OnInit {
     })
       .then((willDelete) => {
         if (willDelete) {
+          this.sending = true;
           let data = { "user": this.user, "patientId": this.id, "freeze": status }
           this.Service.freezePatientdata(data).subscribe(Response => {
             swal("Patient data updated succesfully");
             this.sending = false;
             this.id = null;
-            //this.router.navigate(['/mail/patients']);
+            this.router.navigate(['/mail/patients']);
           }, error => {
             console.log(error);
             swal("Error saving data,please try again");
@@ -183,23 +205,23 @@ export class AddPatientComponent implements OnInit {
       });
   }
 
-
   deleteItem() {
     swal({
       title: "Are you sure?",
-      text: "Once deleted, you will not be able to recover this patient!",
+      text: "Do you want to delete this patient!",
       icon: "warning",
       buttons: ["No", "Yes"],
       dangerMode: true,
     })
       .then((willDelete) => {
         if (willDelete) {
+          this.sending = true;
           let data = { "user": this.user, "patientId": this.id }
           this.Service.deletePatientdata(data).subscribe(Response => {
             swal("Patient deleted succesfully")
             this.sending = false;
             this.id = null;
-            //this.router.navigate(['/mail/patients']);
+            this.router.navigate(['/mail/patients']);
           }, error => {
             console.log(error);
             swal("Error saving data,please try again");
