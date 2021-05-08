@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid p-0 overflow-hidden">
   <!-- top navigation -->
 
   <nav class="navbar navbar-expand-md navbar-dark border-bottom">
@@ -17,7 +17,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" data-bs-target=".navbar-collapse.show"
-              routerLink="/mail/account">Logout</a>
+              routerLink="/login">Logout</a>
           </li>
         </ul>
         <div class="dropdown-divider"></div>
@@ -48,7 +48,8 @@
   </nav>
 
   <div class="row">
-    <div class="d-none d-md-block col-md-2 min-vh-100 p-0" style="border-right: solid 1px #dad8d8;">
+    <div class="d-none d-md-block col-md-2 min-vh-100 p-0"
+      style="border-right: solid 1px #dad8d8;background-color: white;">
       <!-- side navigation -->
       <mat-drawer-container>
         <mat-drawer #drawer mode="over">I'm a drawer</mat-drawer>

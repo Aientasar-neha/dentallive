@@ -28,7 +28,17 @@ import { PatientsComponent } from './patients/patients.component';
 import { AccountComponent } from './account/account.component';
 import { MailSentComponent } from './mail-sent/mail-sent.component';
 import { AddPatientComponent } from './add-patient/add-patient.component';
-
+import { AddcontactComponent } from './addcontact/addcontact.component';
+import { AddaccountComponent } from './addaccount/addaccount.component';
+import { AccountloginComponent } from './accountlogin/accountlogin.component';
+import { AccountsignupComponent } from './accountsignup/accountsignup.component';
+import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.component';
+import { PasswordresetComponent } from './passwordreset/passwordreset.component';
+import { AddpasswordComponent } from './addpassword/addpassword.component';
+import { AddaccountbasicComponent } from './addaccountbasic/addaccountbasic.component';
+import { EditaccountComponent } from './editaccount/editaccount.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 @NgModule({
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
@@ -46,6 +56,15 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
     AccountComponent,
     MailSentComponent,
     AddPatientComponent,
+    AddcontactComponent,
+    AddaccountComponent,
+    AccountloginComponent,
+    AccountsignupComponent,
+    ForgetpasswordComponent,
+    PasswordresetComponent,
+    AddpasswordComponent,
+    AddaccountbasicComponent,
+    EditaccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +81,9 @@ import { AddPatientComponent } from './add-patient/add-patient.component';
     MatPaginatorModule,
     AngularFontAwesomeModule,
     NgxShimmerLoadingModule,
-    MatSortModule
+    MatSortModule,
+    MatTabsModule,
+    MatAutocompleteModule
   ],
   providers: [
     EmailService

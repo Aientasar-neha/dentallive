@@ -1,0 +1,143 @@
+<section id="header">
+  <nav class="px-3 navbar navbar-expand-md bg-white navbar-dark fixed-top">
+    <a class="navbar-brand" href="#">
+      <img src="../../assets/logo.png">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon">
+        <i class="fa fa-bars" aria-hidden="true"></i>
+      </span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ms-md-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Support</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</section>
+
+<section class="mt-5">
+  <div class="container p-3 mt-5 p-md-5">
+    <div class="form-section rounded bg-white p-4 p-md-5 mt-5"
+      style="box-shadow: 0px 4px 20px 0px rgba(7, 213, 232, 0.1);">
+      <div class="row justify-content-between mt-4">
+        <div class="col-md-5 col-12">
+
+          <div *ngIf="sending" class="row">
+            <div class="col-md-12">
+              <lottie-player class="w-100 mt-3 m-auto"
+                src="https://assets6.lottiefiles.com/packages/lf20_fhsx0ijl/lottie/collections-feature.json"
+                background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+              <h6 class=" text-center mt-5">Processing request....please wait,dont close this page</h6>
+            </div>
+          </div>
+
+          <form [hidden]="sending" #f="ngForm" id="mainForm" (ngSubmit)="onSubmit(f)">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <input type="text" required class="form-control" ngModel name="accountfirstName"
+                    placeholder="First name">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-4">
+                  <input type="text" required class="form-control" ngModel name="accountlastName"
+                    placeholder="Last name">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="mb-4">
+                  <input type="email" required class="form-control" ngModel name="emailAddress" pattern="[^ @]*@[^ @]*"
+                    placeholder="Email address">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="mb-4">
+                  <input minlength=8 required type="password" class="form-control" ngModel name="password"
+                    placeholder="Password">
+                  <label style="color: #1991EB;" class="body2 mt-4">
+                    Password must be at least 8 charecters long
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <button type="submit" class="btn btn-primary"
+                style="padding: 8px 52px;border-radius: 5px;height: 50px;width: 180px;">SIGN
+                UP</button>
+            </div>
+            <div class="mb-4">
+              <span class="body1" style="color: #5D6A7E;">Already a member? <a class="fw-bold"
+                  style="color:#00D9CC;text-decoration: none;" href="/login">Sign
+                  In</a></span>
+            </div>
+            <div class="mb-5 d-flex align-items-center" style="color: #5D6A7E;">
+              <div class="form-check">
+                <input class="form-check-input" required type="checkbox" value="" id="agreeTerms" required>
+                <label class="form-check-label" for="agreeTerms">
+                  <small>By signing up you agree to Dental LIVE terms of
+                    service and privacy policy. This page is protected by reCAPTCHA. </small>
+                </label>
+                <div class="invalid-feedback">
+                  You must agree before submitting.
+                </div>
+              </div>
+            </div>
+            <div class="mb-5 text-center body1 orLine position-relative" style="color: #5D6A7E;">
+              <label style="color: rgba(208, 214, 222, 0.4);">OR</label>
+            </div>
+            <div class="mb-5 body1">
+              <a href="#" class="social-media-section">
+                <span class="fa fa-facebook-official"></span><span class="align-self-centered">Continue with
+                  Facebook</span>
+              </a>
+              <a href="#" class="social-media-section">
+                <span class="fa fa-google"></span><span class="align-self-centered">Continue with Google</span>
+              </a>
+              <a href="#" class="social-media-section">
+                <span class="fa fa-apple"></span><span class="align-self-centered">Continue with Apple</span>
+              </a>
+            </div>
+          </form>
+        </div>
+        <div class="d-none d-md-flex flex-column col-md-6 align-items-center">
+          <div class="d-block w-100">
+            <h3 class="mb-2" style="color:#354053">Glad to see you</h3>
+            <label class="body1 mb-3" style="color: #5D6A7E ;">Welcome to Dental-Live,please fill the form to create an
+              account</label>
+          </div>
+          <div class="form-image d-block w-100"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="height: 68px;" class="copyright-area">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-3 col-sm-12 col-12">
+        <div class="footer-menu">
+          <ul class="pl-0 mb-0">
+            <li><a href="#"> <span class="fa fa-facebook-square"></span></a></li>
+            <li><a href="#"> <span class="fa fa-instagram"></span></a></li>
+            <li><a href="#"> <span class="fa fa-twitter"></span></a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6 col-sm-12 col-12">
+        <div class="copyright-text text-center">
+          <small style="color:#5D6A7E">
+            &copy; All Rights Reserved &nbsp;&nbsp; Terms of Use &nbsp;.&nbsp; Privacy Policy
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

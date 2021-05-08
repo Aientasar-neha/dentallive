@@ -6,6 +6,7 @@
 /* Header */
 .navbar {
   box-shadow: 0px 4px 20px 0px rgba(7, 213, 232, 0.1);
+  background-color: #fff;
 }
 
 .navbar-brand img {

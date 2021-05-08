@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'videojs-record-angular'`, () => {
+  it(`should have as title 'dental-live-mail'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('videojs-record-angular');
+    expect(app.title).toEqual('dental-live-mail');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('videojs-record-angular app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('dental-live-mail app is running!');
   });
 });

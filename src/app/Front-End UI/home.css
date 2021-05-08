@@ -1,0 +1,154 @@
+body {
+  background-color: #f7f9fb;
+  color: #354053;
+  font-family: "Sintony", sans-serif;
+  font-size: 0.85rem;
+}
+
+body * {
+  outline: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.btn-secondary {
+  color: rgb(37, 37, 37);
+  background-color: #fff;
+  border-color: #fff;
+}
+
+.btn-secondary:hover {
+  color: rgb(37, 37, 37);
+  background-color: rgb(209, 207, 207);
+  border-color: rgb(209, 207, 207);
+}
+
+.ng-invalid.ng-touched.form-control {
+  border-color: #F7517F;
+  border-width: 2px;
+  box-shadow: 0px 2px 4px #f7518067;
+}
+
+.text-dnager {
+  color: #F7517F;
+}
+
+.form-control,
+.form-select {
+  background: #FFFFFF;
+  border: 1px solid #EBEDED;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 2px rgba(208, 214, 222, 0.2);
+  border-radius: 6px;
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+  color: #354053;
+  height: 50px;
+}
+
+.form-control:focus {
+  background: #FFFFFF;
+  border: 2px solid #00D9CC;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 4px #B4FFFA;
+  border-radius: 6px;
+  outline: 0;
+}
+
+h1 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 80px;
+  line-height: 104px;
+}
+
+h2 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 58px;
+  line-height: 76px;
+}
+
+h3 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 44px;
+  line-height: 57px;
+  align-items: center;
+}
+
+h4 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 34px;
+  line-height: 44px;
+}
+
+h5 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 35px;
+}
+
+h6 {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.body1 {
+  font-family: 'Rubik', sans-serif;
+  ;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+}
+
+.body2 {
+  font-family: 'Rubik', sans-serif;
+  ;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.btn {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: -0.002em;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+.btn.small {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  padding: 10px;
+}
+
+small {
+  font-family: 'Rubik', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.mat-table {
+  font-family: inherit;
+}

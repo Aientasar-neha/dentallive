@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { mail } from '../email.model';
-import { EmailService } from '../email.service';
+import { EmailService, mail } from '../email.service';
 
 @Component({
   selector: 'app-mail-sent',
@@ -10,7 +9,7 @@ import { EmailService } from '../email.service';
 })
 export class MailSentComponent implements OnInit {
 
-  private user = "mohdnihar@gmail.com"
+  private user = sessionStorage.getItem("user")
   private type = "OUT"
   private patientId = 0;
   private subUserId = 0;
@@ -34,8 +33,8 @@ export class MailSentComponent implements OnInit {
     this.Service.readallMaildata(this.data)
       .subscribe(Response => {
         console.log(Response);
-        if (Response) {
-          this.Service.updateMailData(Response);
+        if (Response["mail"]) {
+          this.Service.updateMailData(Response["mail"]);
           this.dataSource = new MatTableDataSource(this.Service.sharedEmailData.value);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

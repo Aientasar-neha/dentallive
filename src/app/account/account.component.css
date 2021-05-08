@@ -1,0 +1,26 @@
+tr.mat-row {
+    cursor: pointer;
+    transition: all .3s;
+    height: 5em;
+  }
+  
+  tr.mat-header-row {
+    background-color: #47c2be;
+  }
+  
+  .mat-header-cell {
+    color: white;
+    font-size: 16px;
+  }
+  
+  tr.mat-row:hover {
+    background-color: #f7f7f7;
+  }
+  
+  .mat-cell {
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 10px;
+  }
+  

@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { PatientService } from './../patient.service';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert';
-import { EmailService } from '../email.service';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
@@ -22,9 +22,9 @@ export class AddPatientComponent implements OnInit {
   removeImage: boolean;
   patient: any;
   imageName: string;
-  private user = "mohdnihar@gmail.com"
+  private user = sessionStorage.getItem("user")
 
-  constructor(private router: Router, private Service: EmailService, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private router: Router, private Service: PatientService, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.edit = false;
@@ -56,13 +56,13 @@ export class AddPatientComponent implements OnInit {
           let data = { "user": this.user, "patientId": params.get('id') }
           this.Service.readPatientdata(data)
             .subscribe(Response => {
-              if (Response) {
-                Object.keys(Response).forEach(key => {
+              if (Response["user"]) {
+                Object.keys(Response["user"]).forEach(key => {
                   if (key in this.patient)
-                    this.patient[key] = Response[key];
+                    this.patient[key] = Response["user"][key];
                 });
                 this.changeDetectorRef.detectChanges();
-                this.setValue(Response);
+                this.setValue(Response["user"]);
               }
             }, error => {
               console.log(error);
@@ -118,6 +118,7 @@ export class AddPatientComponent implements OnInit {
 
   savetoDB(newImagename, form: NgForm) {
     let json: JSON = form.value;
+    json['loggedUser'] = this.user;
 
     if (newImagename)
       json['imageSrc'] = newImagename;
@@ -128,10 +129,8 @@ export class AddPatientComponent implements OnInit {
     else
       json['imageSrc'] = "";
 
-    if (!this.edit)
-      json['touched'] = false;
-
     this.id = this.id ? this.id : uuidv4();
+    json['touched'] = this.touched;
     json['patientId'] = this.id;
     json['freeze'] = false;
     this.Service.savePatient(json)

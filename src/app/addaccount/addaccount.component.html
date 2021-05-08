@@ -1,0 +1,66 @@
+<div class="container mt-5 rounded px-5 py-3">
+  <div *ngIf="sending" class="row">
+    <div class="col-md-12">
+      <lottie-player class="w-100 mt-3 m-auto"
+        src="https://assets6.lottiefiles.com/packages/lf20_fhsx0ijl/lottie/collections-feature.json"
+        background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+      <h6 class=" text-center mt-5">Processing request....please wait,dont close this page</h6>
+    </div>
+  </div>
+  <ng-form [hidden]="sending" #f="ngForm" id="mainForm" (ngSubmit)="onSubmit(f)">
+    <div class="row mb-4">
+      <div class="col-md-4 mb-4">
+        <img #accountImg [src]="imageSrc?imageSrc:'../assets/account.png'" class="img-thumbnail rounded">
+        <div class="d-grid gap-2 mt-2">
+          <input type="file" accept="image/x-png,image/gif,image/jpeg" (change)="loadFiles($event)"
+            class="d-none custom-file-input" id="selectedFiles">
+          <label class="btn small btn-primary" for="selectedFiles">Upload</label>
+          <button (click)="removeFile();" type="button" class="btn small btn-secondary border d-block">remove</button>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">First name</label>
+              <input type="text" required class="form-control" [(ngModel)]="account.accountfirstName"
+                name="accountfirstName" placeholder="Jhon">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Last name</label>
+              <input type="text" class="form-control" [(ngModel)]="account.accountlastName" name="accountlastName"
+                placeholder="Doe">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label class="form-label">Date of birth</label>
+              <input type="date" class="form-control" [(ngModel)]="account.dob" name="dob" placeholder="12-10-1989">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label class="form-label">Phone number</label>
+              <input type="text" class="form-control" [(ngModel)]="account.phoneNumber" name="phoneNumber"
+                placeholder="(250) 555-0199">
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="row gx-2 mt-3 align-items-end" style="justify-content: flex-end;">
+              <div class="col-md-4">
+                <a routerLink="/mail/accounts" class="btn small btn-secondary w-100 border mb-3 mb-md-0">Cancel</a>
+              </div>
+              <div class="col-md-4 order-md-3">
+                <button (click)="onSubmit(f)" type="submit" class="btn small btn-primary w-100 mb-3 mb-md-0">
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-form>
+</div>

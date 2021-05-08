@@ -1,0 +1,121 @@
+/* Header */
+.navbar {
+  box-shadow: 0px 4px 20px 0px rgba(7, 213, 232, 0.1);
+}
+
+.navbar-brand img {
+  max-height: 35px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #7F8FA4;
+  font-weight: 600;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus,
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #5D6A7E;
+}
+
+.navbar-dark .navbar-toggler {
+  color: rgb(40, 112, 183);
+  border-color: rgb(40, 112, 183);
+}
+
+.navbar-toggler-icon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.subscribe {
+  color: #1991EB !important;
+  border-color: #1991EB !important;
+  width: 135px;
+}
+
+.subscribe:hover {
+  color: #fff !important
+}
+
+.social-media-section {
+  border: 1px solid #EFF3F7;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: #5D6A7E;
+}
+
+.social-media-section:hover {
+  background-color: #EBEDED;
+  text-decoration: none;
+}
+
+.social-media-section .fa {
+  margin-right: 11px;
+  color: #0070D2;
+}
+
+.form-image {
+  background: url(../../assets/signup_bg.png) no-repeat 0 0;
+  background-size: 100%;
+  background-position: top;
+  height: 300px;
+}
+
+/* Footer */
+.copyright-area {
+  background: #fff;
+  padding: 10px 0;
+}
+
+
+.footer-menu li {
+  display: inline-block;
+  margin-right: 23px;
+  font-size: 23px;
+}
+
+.footer-menu li a {
+  color: #5D6A7E;
+}
+
+.orLine::after,
+.orLine::before {
+  content: "";
+  border: 1px dashed rgba(208, 214, 222, 0.4);
+  height: 1px;
+  height: 1px;
+  position: absolute;
+  position: absolute;
+  width: calc(50% - 16px);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 0;
+}
+
+.orLine::after {
+  right: 0;
+  left: auto;
+}
+
+
+/* Media Queries */
+
+@media (max-width:768px) {
+  .copyright-area {
+    text-align: center;
+  }
+}
+
+@media (min-width:768px) {
+  .navbar-expand-md .navbar-nav .nav-link {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}

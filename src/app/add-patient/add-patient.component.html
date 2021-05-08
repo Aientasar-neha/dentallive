@@ -1,11 +1,12 @@
-<div class="container mt-5">
+<div class="container mt-5 rounded px-5 py-3"
+  style="background: white;box-shadow: 0px 4px 20px rgba(7, 213, 232, 0.1);">
   <h4 class="mb-4 mt-3 p-0">Add Patient</h4>
   <div *ngIf="sending" class="row">
     <div class="col-md-12">
       <lottie-player class="w-100 mt-3 m-auto"
         src="https://assets6.lottiefiles.com/packages/lf20_fhsx0ijl/lottie/collections-feature.json"
         background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
-      <h6 class="fw-bold text-center mt-5">Processing request....please wait,dont close this page</h6>
+      <h6 class=" text-center mt-5">Processing request....please wait,dont close this page</h6>
     </div>
   </div>
   <ng-form [hidden]="sending" #f="ngForm" id="mainForm" (ngSubmit)="onSubmit(f)">

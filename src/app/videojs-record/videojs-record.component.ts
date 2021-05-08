@@ -1,3 +1,4 @@
+import { PatientService } from './../patient.service';
 import { Component, OnDestroy } from '@angular/core';
 import videojs from 'video.js';
 import * as Wavesurfer from 'videojs-wavesurfer/dist/videojs.wavesurfer.js';
@@ -8,6 +9,7 @@ import { EmailService } from '../email.service';
 import swal from 'sweetalert';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-videojs-record',
@@ -44,6 +46,11 @@ export class VideojsRecordComponent implements OnDestroy {
   sending = false;
   invalidForm = false;
 
+  patientList = [];
+  contactList = [];
+  contactFilterdList = [];
+  addressList = [];
+
   fileURL = "http://mail.dentallive.s3-website-us-west-2.amazonaws.com/file/";
 
   //supply headers
@@ -54,6 +61,90 @@ export class VideojsRecordComponent implements OnDestroy {
   private fromAddress: string;
   private username: string;
   private form: any;
+
+
+  // constructor initializes our declared vars
+  constructor(private router: Router, private Service: EmailService, private PatientService: PatientService) {
+    this.initPlayers();
+    this.username = "Dental-Live Admin";
+    this.profile = "https://www.atpplanner.com/users/17.jpg?timestamp=1619256767817";
+    this.subUserId = 123;
+    this.fromAddress = sessionStorage.getItem("dentalId");
+    this.fetchData();
+  }
+
+  ngAfterViewInit() {
+    this.VideoPlayer = videojs(document.getElementById('videoPlayer'), this.VideoConfig);
+    this.VideoPlayer.on('finishRecord', () => {
+      this.latestVideoRecord = this.VideoPlayer.recordedData;
+      this.VideoPlayer.record().stopDevice();
+    });
+    this.VideoPlayer.on('deviceError', (e) => console.log(e));
+    this.VideoPlayer.on('error', (e) => console.log(e));
+    this.VideoPlayer.on('deviceReady', () => this.StepVideo = 2);
+    this.VideoPlayer.on('startRecord', () => this.StepVideo = 3);
+    this.VideoPlayer.on('stopRecord', () => {
+      if (this.StepVideo != 5)
+        this.StepVideo = 5;
+    });
+
+    this.audioPlayer = videojs(document.getElementById('audioPlayer'), this.audioConfig);
+    this.audioPlayer.on('finishRecord', () => {
+      this.latestAudioRecord = this.audioPlayer.recordedData;
+      this.audioPlayer.record().stopDevice();
+    });
+
+    this.audioPlayer.on('deviceReady', () => this.StepAudio = 2);
+    this.audioPlayer.on('startRecord', () => this.StepAudio = 3);
+    this.audioPlayer.on('stopRecord', () => {
+      if (this.StepAudio != 5)
+        this.StepAudio = 5
+    });
+
+    this.screenPlayer = videojs(document.getElementById('screenPlayer'), this.screenConfig);
+    this.screenPlayer.on('finishRecord', () => {
+      this.latestScreenRecord = this.screenPlayer.recordedData;
+      this.screenPlayer.record().stopDevice();
+    });
+
+    this.screenPlayer.on('deviceReady', () => this.StepScreen = 2);
+    this.screenPlayer.on('startRecord', () => this.StepScreen = 3);
+    this.screenPlayer.on('stopRecord', () => {
+      if (this.StepScreen != 5)
+        this.StepScreen = 5
+    });
+
+    this.popupVideoPlayer = videojs(document.getElementById('popupVideoPlayer'), this.popupVideoConfig);
+    this.popupVideoPlayer.on('deviceReady', () => {
+      console.log('device reday');
+      this.popupVideoPlayer.requestPictureInPicture();
+    });
+    this.popupVideoPlayer.on('leavePIP', () => {
+      console.log('leavePIP');
+      this.popupVideoPlayer.record().stopDevice();
+      this.pipEnabled = false;
+    });
+  }
+
+  // use ngOnDestroy to detach event handlers and remove the VideoPlayer
+  ngOnDestroy() {
+    if (this.VideoPlayer) {
+      this.VideoPlayer.dispose();
+      this.VideoPlayer = false;
+    }
+    if (this.audioPlayer) {
+      this.audioPlayer.dispose();
+      this.audioPlayer = false;
+    }
+    if (this.screenPlayer) {
+      this.screenPlayer.dispose();
+      this.screenPlayer = false;
+    }
+    if (this.popupVideoPlayer) {
+      this.popupVideoPlayer.dispose();
+      this.popupVideoPlayer = false;
+    }
+  }
 
   initPlayers() {
     this.VideoPlayer = false;
@@ -140,93 +231,34 @@ export class VideojsRecordComponent implements OnDestroy {
       }
     };
   }
-
-  // constructor initializes our declared vars
-  constructor(private router: Router, private Service: EmailService) {
-    this.initPlayers();
-
-    this.username = "Dental-Live Admin";
-    this.profile = "https://www.atpplanner.com/users/17.jpg?timestamp=1619256767817";
-    this.subUserId = 123;
-    this.fromAddress = "admin@dentallive.tk"
-
-  }
-
-  ngAfterViewInit() {
-
-    this.VideoPlayer = videojs(document.getElementById('videoPlayer'), this.VideoConfig);
-
-    this.VideoPlayer.on('finishRecord', () => {
-      this.latestVideoRecord = this.VideoPlayer.recordedData;
-      this.VideoPlayer.record().stopDevice();
-    });
-    this.VideoPlayer.on('deviceError', (e) => console.log(e));
-    this.VideoPlayer.on('error', (e) => console.log(e));
-    this.VideoPlayer.on('deviceReady', () => this.StepVideo = 2);
-    this.VideoPlayer.on('startRecord', () => this.StepVideo = 3);
-    this.VideoPlayer.on('stopRecord', () => {
-      if (this.StepVideo != 5)
-        this.StepVideo = 5;
-    });
-
-    this.audioPlayer = videojs(document.getElementById('audioPlayer'), this.audioConfig);
-    this.audioPlayer.on('finishRecord', () => {
-      this.latestAudioRecord = this.audioPlayer.recordedData;
-      this.audioPlayer.record().stopDevice();
-    });
-
-    this.audioPlayer.on('deviceReady', () => this.StepAudio = 2);
-    this.audioPlayer.on('startRecord', () => this.StepAudio = 3);
-    this.audioPlayer.on('stopRecord', () => {
-      if (this.StepAudio != 5)
-        this.StepAudio = 5
-    });
-
-    this.screenPlayer = videojs(document.getElementById('screenPlayer'), this.screenConfig);
-    this.screenPlayer.on('finishRecord', () => {
-      this.latestScreenRecord = this.screenPlayer.recordedData;
-      this.screenPlayer.record().stopDevice();
-    });
-
-    this.screenPlayer.on('deviceReady', () => this.StepScreen = 2);
-    this.screenPlayer.on('startRecord', () => this.StepScreen = 3);
-    this.screenPlayer.on('stopRecord', () => {
-      if (this.StepScreen != 5)
-        this.StepScreen = 5
-    });
-
-    this.popupVideoPlayer = videojs(document.getElementById('popupVideoPlayer'), this.popupVideoConfig);
-    this.popupVideoPlayer.on('deviceReady', () => {
-      console.log('device reday');
-      this.popupVideoPlayer.requestPictureInPicture();
-    });
-    this.popupVideoPlayer.on('leavePIP', () => {
-      console.log('leavePIP');
-      this.popupVideoPlayer.record().stopDevice();
-      this.pipEnabled = false;
-    });
-  }
-
-  // use ngOnDestroy to detach event handlers and remove the VideoPlayer
-  ngOnDestroy() {
-    if (this.VideoPlayer) {
-      this.VideoPlayer.dispose();
-      this.VideoPlayer = false;
-    }
-    if (this.audioPlayer) {
-      this.audioPlayer.dispose();
-      this.audioPlayer = false;
-    }
-    if (this.screenPlayer) {
-      this.screenPlayer.dispose();
-      this.screenPlayer = false;
-    }
-    if (this.popupVideoPlayer) {
-      this.popupVideoPlayer.dispose();
-      this.popupVideoPlayer = false;
+  istouched = false;
+  addMail(event, value, to) {
+    if (event.key === "Enter" || event.key === "tab" || event.key === " " || event.key === "tab") {
+      if (value && value != '') {
+        this.addressList.push(value);
+        to.value = '';
+      }
     }
   }
+  filterContact(val) {
+    console.log(val);
+    let newList = this.contactList.filter(function (contact) {
+      return (contact.PatientfirstName.includes(val) || contact.PatientlastName.includes(val) || contact.emailAddress.includes(val))
+    });
+    this.contactFilterdList = newList;
+  }
 
+  fetchData() {
+    this.PatientService.readPatientdata({ "user": sessionStorage.getItem("user") })
+      .subscribe(Response => {
+        if (Response["users"]) {
+          this.patientList = Response["users"];
+        }
+      }, error => {
+        console.log(error);
+        return null;
+      })
+  }
   addVideo(name) {
     name = name + ".mp4"
     if (this.latestVideoRecord) {
@@ -308,6 +340,7 @@ export class VideojsRecordComponent implements OnDestroy {
     json['subUserId'] = this.subUserId;
     json['htmlText'] = htmlText;
     json['plainText'] = plainText;
+    json['loggedUser'] = sessionStorage.getItem("user");
 
     this.Service.sendMail(json)
       .subscribe(Response => {
@@ -354,6 +387,7 @@ export class VideojsRecordComponent implements OnDestroy {
 
     if (form.invalid) {
       form.form.markAllAsTouched();
+      this.istouched = true;
       this.invalidForm = true;
       return;
     }

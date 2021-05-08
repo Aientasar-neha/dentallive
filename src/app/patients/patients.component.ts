@@ -1,7 +1,6 @@
-import { patient } from './../email.model';
+import { patient, PatientService } from './../patient.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { EmailService } from '../email.service';
 
 @Component({
   selector: 'app-patients',
@@ -10,7 +9,7 @@ import { EmailService } from '../email.service';
 })
 export class PatientsComponent implements OnInit {
 
-  private user = "mohdnihar@gmail.com"
+  private user = sessionStorage.getItem("user")
   data = { "user": this.user }
   shimmer = Array;
   loading = true;
@@ -21,7 +20,7 @@ export class PatientsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
 
-  constructor(private Service: EmailService) { }
+  constructor(private Service: PatientService) { }
 
   ngOnInit() {
     this.fetchData();
@@ -31,8 +30,8 @@ export class PatientsComponent implements OnInit {
     this.Service.readPatientdata(this.data)
       .subscribe(Response => {
         console.log(Response);
-        if (Response) {
-          this.Service.updatePatientData(Response);
+        if (Response["users"]) {
+          this.Service.updatePatientData(Response["users"]);
           this.dataSource = new MatTableDataSource(this.Service.sharedPatientData.value);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

@@ -17,7 +17,7 @@ export class ViewMailComponent implements OnInit {
   backLink = '/mail/inbox';
 
 
-  private user = "mohdnihar@gmail.com"
+  private user = sessionStorage.getItem("user")
   private type = "INC"
   data = { "user": this.user, "mailType": this.type, "type": 1 }
 
@@ -41,8 +41,8 @@ export class ViewMailComponent implements OnInit {
           this.data.mailType = this.data.mailType + '#' + params.get('id');
           this.Service.readallMaildata(this.data)
             .subscribe(Response => {
-              if (Response) {
-                this.message = Response[0];
+              if (Response["mail"]) {
+                this.message = Response["mail"];
                 params.get('type') == "sent" ? this.fromHtml = "To : " + this.message.MailTo : this.fromHtml = "From : " + this.message.MailFrom.html;
                 this.message.messageHTML ? this.message.htmlText = this.sanitizer.bypassSecurityTrustHtml(this.message.messageHTML) : this.message.htmlText = this.sanitizer.bypassSecurityTrustHtml(this.message.htmlText);
               }
