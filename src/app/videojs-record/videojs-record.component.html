@@ -24,11 +24,11 @@
           [ngClass]="{'ng-invalid':addressList.length==0 && toAddress.value=='','ng-touched':istouched}"
           (click)="toAddress.focus()">
           <small *ngFor="let mail of addressList;let i=index" style="font-size: 12px;font-weight: 100;"
-            class="badge rounded-pill bg-primary align-self-center p-2 m-2">{{mail}}<i (click)="addressList.splice(i,1)"
-              class="fa fa-times m-1"></i></small>
+            class="badge text-primary border-primary border-2 rounded-pill border align-self-center p-1 m-1">{{mail}}<i
+              (click)="addressList.splice(i,1)" class="fa fa-times m-1"></i></small>
           <input (blur)="istouched=true" #toAddress type="email"
             (keydown)="addMail($event,$event.target.value,toAddress);" (keyup)="filterContact($event.target.value);"
-            class="form-control border-0 p-0 m-0 h-auto w-auto shadow-none" ngModel id="toAddresses"
+            class="form-control  border-0 p-0 m-0 h-auto w-auto shadow-none" ngModel id="toAddresses"
             placeholder="Eg. jhon@gmail.com" name="toAddresses"
             [required]="addressList.length==0 && toAddress.value==''">
         </div>
