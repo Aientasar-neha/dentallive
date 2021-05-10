@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert';
 import { AccountService } from './../account.service';
 
@@ -10,12 +10,15 @@ import { AccountService } from './../account.service';
   styleUrls: ['./passwordreset.component.css']
 })
 export class PasswordresetComponent implements OnInit {
-  sending: boolean;
-
-  constructor(private router: Router, private Service: AccountService) { }
+  user: string;
+  constructor(private router: Router, private route: ActivatedRoute, private Service: AccountService) { }
 
   ngOnInit() {
-    this.sending = false;
+    this.route.paramMap.subscribe(params => {
+      if (params.get('mail') && params.get('mail') != "") {
+        this.user = params.get('mail');
+      }
+    });
   }
 
   onSubmit = function (form: NgForm) {

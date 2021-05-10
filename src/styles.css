@@ -157,11 +157,11 @@ h6 {
 .btn {
   font-style: normal;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 21px;
   letter-spacing: -0.002em;
   text-transform: uppercase;
-  padding: 12px;
+  padding: 6px;
 }
 
 .btn.small {

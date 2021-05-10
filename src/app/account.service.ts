@@ -25,14 +25,16 @@ export class AccountService {
   putAccount: string;//signup
   readAccount: string;
   loginAccount: string;//login
-  updateAccount;//internal update
+  updateAccount: string;//internal update
+  forgetPassword: string;
 
   constructor(private http: HttpClient) {
     this.preSignUrl = "https://hg6x56ixcl.execute-api.us-west-2.amazonaws.com/default/createPresignedUrl";
     this.putAccount = "https://6vvl848qm2.execute-api.us-west-2.amazonaws.com/default/putAccount";
     this.readAccount = "https://nt7yyffmx5.execute-api.us-west-2.amazonaws.com/default/getAccount";
     this.loginAccount = "https://7w0lcl5bn3.execute-api.us-west-2.amazonaws.com/default/loginAccount";
-    this.updateAccount = "https://kpxbsvgeu8.execute-api.us-west-2.amazonaws.com/default/updateAccount"
+    this.updateAccount = "https://kpxbsvgeu8.execute-api.us-west-2.amazonaws.com/default/updateAccount";
+    this.forgetPassword = "https://sezzvbnh16.execute-api.us-west-2.amazonaws.com/default/forgetPassword";
   }
 
   updateAccountData(message: any) {
@@ -58,6 +60,10 @@ export class AccountService {
 
   updateAccountdata(data) {
     return this.http.post(this.updateAccount, data);
+  }
+
+  forgetPasswordData(data) {
+    return this.http.post(this.forgetPassword, data);
   }
 
   loginAccountData(data) {

@@ -1,3 +1,4 @@
+import { ContactService } from './../contact.service';
 import { PatientService } from './../patient.service';
 import { Component, OnDestroy } from '@angular/core';
 import videojs from 'video.js';
@@ -62,9 +63,8 @@ export class VideojsRecordComponent implements OnDestroy {
   private username: string;
   private form: any;
 
-
   // constructor initializes our declared vars
-  constructor(private router: Router, private Service: EmailService, private PatientService: PatientService) {
+  constructor(private router: Router, private Service: EmailService, private PatientService: PatientService, private contactService: ContactService) {
     this.initPlayers();
     this.username = "Dental-Live Admin";
     this.profile = "https://www.atpplanner.com/users/17.jpg?timestamp=1619256767817";
@@ -232,18 +232,38 @@ export class VideojsRecordComponent implements OnDestroy {
     };
   }
   istouched = false;
-  addMail(event, value, to) {
-    if (event.key === "Enter" || event.key === "tab" || event.key === " " || event.key === "tab") {
-      if (value && value != '') {
+
+  addtoList(value, to) {
+    if (value && value != '') {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(String(value).toLowerCase())) {
         this.addressList.push(value);
         to.value = '';
+      } else {
+        to.value = '';
+        return false;
       }
     }
   }
+
+  addMail(event, value, to) {
+    console.log(event.key);
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(String(value).toLowerCase())) {
+      if (event.key === "Enter" || event.key === ",") {
+        this.addtoList(value, to)
+        return false;
+      }
+    } else {
+      if (event.key === "Enter" || event.key === ",")
+        return false;
+    }
+  }
   filterContact(val) {
-    console.log(val);
+    if (val == "")
+      return;
     let newList = this.contactList.filter(function (contact) {
-      return (contact.PatientfirstName.includes(val) || contact.PatientlastName.includes(val) || contact.emailAddress.includes(val))
+      return (contact.ContactfirstName.includes(val) || contact.ContactlastName.includes(val) || contact.emailAddress.includes(val))
     });
     this.contactFilterdList = newList;
   }
@@ -253,6 +273,17 @@ export class VideojsRecordComponent implements OnDestroy {
       .subscribe(Response => {
         if (Response["users"]) {
           this.patientList = Response["users"];
+        }
+      }, error => {
+        console.log(error);
+        return null;
+      })
+
+    this.contactService.readContactdata({ "user": sessionStorage.getItem("user") })
+      .subscribe(Response => {
+        if (Response["users"]) {
+          this.contactList = Response["users"];
+          this.contactFilterdList = this.contactList;
         }
       }, error => {
         console.log(error);
@@ -324,6 +355,7 @@ export class VideojsRecordComponent implements OnDestroy {
   }
 
   savetoDB() {
+
     //create html div and text using links
     let htmlText = this.form.value.message;
     let plainText = this.form.value.message + "\n";
@@ -341,17 +373,20 @@ export class VideojsRecordComponent implements OnDestroy {
     json['htmlText'] = htmlText;
     json['plainText'] = plainText;
     json['loggedUser'] = sessionStorage.getItem("user");
+    json['toAddresses'] = this.addressList.join(',');
 
-    this.Service.sendMail(json)
-      .subscribe(Response => {
-        swal("Email sent succesfully");
-        this.sending = false;
-        this.router.navigate(['/mail/inbox']);
-      }, error => {
-        console.log(error);
-        swal("Error sending email,please try again");
-        this.sending = false;
-      })
+    console.log(json);
+
+    // this.Service.sendMail(json)
+    //   .subscribe(Response => {
+    //     swal("Email sent succesfully");
+    //     this.sending = false;
+    //     this.router.navigate(['/mail/inbox']);
+    //   }, error => {
+    //     console.log(error);
+    //     swal("Error sending email,please try again");
+    //     this.sending = false;
+    //   })
   }
 
   loadFiles = function (event) {
@@ -385,7 +420,7 @@ export class VideojsRecordComponent implements OnDestroy {
 
   onSubmit = function (form: NgForm) {
 
-    if (form.invalid) {
+    if (form.invalid || this.addressList.length == 0) {
       form.form.markAllAsTouched();
       this.istouched = true;
       this.invalidForm = true;
