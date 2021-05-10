@@ -29,16 +29,28 @@ export class ForgetpasswordComponent implements OnInit {
     this.Service.forgetPasswordData(json)
       .subscribe(Response => {
         this.sending = false;
-        this.router.navigate(['/reset', json['emailAddress']]);
+        switch (Response) {
+          case 200: {
+            this.router.navigate(['/reset', json['emailAddress']]);
+            break;
+          }
+          case 400: {
+            swal("Bad request,enter proper Email address")
+            break;
+          }
+          case 404: {
+            swal("E-Mail ID does not exists,please signup to continue")
+            break;
+          }
+          case 500: {
+            swal("Unable to reset password,please try again");
+            break;
+          }
+        }
       }, error => {
         this.sending = false;
-        console.log(error);
-        console.log(error.errorMessage);
-        if (error.status == 404)
-          swal("E-Mail ID does not exists,please signup to continue")
-        else
-          swal("Unable to reset password,please try again");
-      })
+        swal("Unable to reset password,please try again");
+      });
   }
 }
 
